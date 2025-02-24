@@ -1,0 +1,27 @@
+name: Manual Trigger Workflow
+
+on:
+  workflow_dispatch: # This makes the workflow run only when manually triggered
+
+jobs:
+  run-manual-job:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Conda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          channels: conda-forge
+          python-version: 3.12
+          miniforge-version: "latest"
+
+      - name: Create and activate build environment
+        run: |
+          conda create -n testenv python=3.12
+          conda activate testenv
+          conda install -c conda-forge -c lcrippa edipack
+          python test/hm_bethe.py
+
