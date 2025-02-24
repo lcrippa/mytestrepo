@@ -1,4 +1,4 @@
-name: Manual Trigger Workflow
+name: Test on mac os
 
 on:
   workflow_dispatch: # This makes the workflow run only when manually triggered
@@ -21,6 +21,12 @@ jobs:
       - name: Create and activate build environment
         run: |
           conda create -n testenv python=3.12
+          conda init bash
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            source ~/.bash_profile
+          else
+            source ~/.bashrc
+          fi
           conda activate testenv
           conda install -c conda-forge -c lcrippa edipack
           python test/hm_bethe.py
