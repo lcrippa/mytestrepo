@@ -29,5 +29,6 @@ jobs:
           fi
           conda activate testenv
           conda install -c conda-forge -c lcrippa edipack
-          python test/hm_bethe.py
+          cd test
+          python3 hm_bethe.py
 
