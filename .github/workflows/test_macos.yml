@@ -20,7 +20,7 @@ jobs:
 
       - name: Create and activate build environment
         run: |
-          conda create -n testenv python=3.12
+          conda create -n testenv python=3.10
           conda init bash
           if [[ "$RUNNER_OS" == "macOS" ]]; then
             source ~/.bash_profile
