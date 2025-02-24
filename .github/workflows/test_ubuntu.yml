@@ -5,7 +5,7 @@ on:
 
 jobs:
   run-manual-job:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,11 +22,7 @@ jobs:
         run: |
           conda create -n testenv python=3.12
           conda init bash
-          if [[ "$RUNNER_OS" == "macOS" ]]; then
-            source ~/.bash_profile
-          else
-            source ~/.bashrc
-          fi
+          source ~/.bashrc
           conda activate testenv
           conda install -c conda-forge -c lcrippa edipack mpi4py
           cd test
