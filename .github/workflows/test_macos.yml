@@ -15,12 +15,12 @@ jobs:
         with:
           auto-update-conda: true
           channels: conda-forge
-          python-version: 3.10
+          python-version: "3.10"
           miniforge-version: "latest"
 
       - name: Create and activate build environment
         run: |
-          conda create -n testenv python=3.10
+          conda create -n testenv "python=3.10"
           conda init bash
           if [[ "$RUNNER_OS" == "macOS" ]]; then
             source ~/.bash_profile
