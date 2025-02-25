@@ -1,4 +1,4 @@
-name: Trigger Repo C on New Tag
+name: test get tag
 
 # This triggers on any creation event of a tag
 on:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   trigger-repo-c:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: 
         run: |
