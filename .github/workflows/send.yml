@@ -11,9 +11,9 @@ jobs:
   trigger-repo-c:
     runs-on: ubuntu-latest
     steps:
-      - name: test
+      - name: 
         run: |
           LATEST_TAG=$(curl -s "https://api.github.com/repos/edipack/edipack2.0/git/refs/tags" | \
           jq -r '.[].ref' | sed 's#refs/tags/##' | sort -V | grep -v v | tail -n 1)
-          echo "Latest Tag: $LATEST_TAG"
+          echo "Latest Tag: \"$LATEST_TAG\""
 
