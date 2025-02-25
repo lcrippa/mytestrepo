@@ -1,0 +1,20 @@
+name: Trigger Repo C on New Tag
+
+# This triggers on any creation event of a tag
+on:
+  create:
+    tags:
+      - '*'  # Matches any tag
+
+jobs:
+  trigger-repo-c:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send repository_dispatch event to Repo C
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/lcrippa/mytestrepo2/dispatches \
+            -d "{\"event_type\": \"new-tag-created\", \"client_payload\": {\"tag\": \"${GITHUB_REF}\", \"source_repo\": \"${{ github.repository }}\"}}"
+
