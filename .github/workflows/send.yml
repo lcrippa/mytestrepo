@@ -5,6 +5,7 @@ on:
   create:
     tags:
       - '*'  # Matches any tag
+  workflow_dispatch:
 
 jobs:
   trigger-repo-c:
