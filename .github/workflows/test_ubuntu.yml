@@ -24,7 +24,7 @@ jobs:
           conda init bash
           source ~/.bashrc
           conda activate testenv
-          conda install -c conda-forge -c lcrippa edipack mpi4py
+          conda install -c conda-forge -c edipack edipack2
           cd test
           mpirun -np 1 python3 hm_bethe.py
 
