@@ -28,7 +28,7 @@ jobs:
             source ~/.bashrc
           fi
           conda activate testenv
-          conda install -c conda-forge -c lcrippa edipack mpi4py lapack scalapack openblas
+          conda install -c conda-forge -c edipack edipack2
           cd test
-          python3 ahm.py
+          python3 hm_bethe.py
 
