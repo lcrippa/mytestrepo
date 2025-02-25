@@ -11,11 +11,22 @@ jobs:
   trigger-repo-c:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
       - name: Send repository_dispatch event to Repo C
         run: |
+          ssh -T git@github.com || true  # Debug SSH access
           curl -X POST \
-            -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
+            -H "Authorization: Bearer $(ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes git@github.com)" \
             -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/lcrippa/mytestrepo2/dispatches \
+            https://api.github.com/repos/YOUR_ORG/RepoC/dispatches \
             -d "{\"event_type\": \"new-tag-created\", \"client_payload\": {\"tag\": \"${GITHUB_REF}\", \"source_repo\": \"${{ github.repository }}\"}}"
+          LATEST_TAG=$(curl -s "https://api.github.com/repos/edipack/edipack2.0/git/refs/tags" | \
+          jq -r '.[].ref' | sed 's#refs/tags/##' | sort -V | grep -v v | tail -n 1)
+          echo "Latest Tag: $LATEST_TAG"
 
