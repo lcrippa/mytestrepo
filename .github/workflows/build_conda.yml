@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest,macos-latest]
+        os: [macos-latest]
         python-version: ["3.12","3.13"]
     env:
       ANACONDA_API_KEY: ${{ secrets.ANACONDA_API_TOKEN }}
