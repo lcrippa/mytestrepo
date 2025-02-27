@@ -1,0 +1,26 @@
+name: Test on mac os
+
+on:
+  workflow_dispatch: # This makes the workflow run only when manually triggered
+
+jobs:
+  run-manual-job:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Conda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          channels: conda-forge
+          python-version: "3.12"
+          miniforge-version: "latest"
+
+      - name: Get Latest Tag from edipack2.0
+        run: |
+          LATEST_TAG=$(curl -s "https://api.github.com/repos/edipack/edipack2.0/git/refs/tags" | \
+          jq -r '.[].ref' | sed 's#refs/tags/##g' | sort -V | grep -E '^[0-9]+(\.[0-9]+)*$' | tail -n 1)
+          echo "Latest Tag: $LATEST_TAG"
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
