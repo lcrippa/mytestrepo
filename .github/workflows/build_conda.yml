@@ -12,7 +12,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: ["3.13"]
     env:
-      ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
+      ANACONDA_API_KEY: ${{ secrets.ANACONDA_API_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
