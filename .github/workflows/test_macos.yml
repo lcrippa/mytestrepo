@@ -4,8 +4,14 @@ on:
   workflow_dispatch: # This makes the workflow run only when manually triggered
 
 jobs:
-  run-manual-job:
-    runs-on: macos-latest
+  build-upload:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest]
+        python-version: ["3.12","3.13"]
+        
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -15,7 +21,7 @@ jobs:
         with:
           auto-update-conda: true
           channels: conda-forge
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
           miniforge-version: "latest"
 
       - name: Create and activate build environment
