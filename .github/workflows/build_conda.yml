@@ -1,0 +1,64 @@
+name: Build and Upload Conda Packages (one runner)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-upload:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.12"]
+    env:
+      ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Conda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          channels: conda-forge
+          python-version: ${{ matrix.python-version }}
+          miniforge-version: "latest"
+
+      - name: Create and activate build environment
+        run: |
+          conda create -n build-env python=${{ matrix.python-version }} rattler-build anaconda-client -y
+          echo "CONDA_ENV=build-env" >> $GITHUB_ENV
+
+      - name: Get Latest Tag from edipack2.0
+        run: |
+          LATEST_TAG=$(curl -s "https://api.github.com/repos/edipack/edipack2.0/git/refs/tags" | \
+          jq -r '.[].ref' | sed 's#refs/tags/##' | sort -V | grep -v v | tail -n 1)
+          echo "Latest Tag: $LATEST_TAG"
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+
+      - name: Build Conda Package
+        id: build
+        run: |
+          # Build using the output folder and override the Python variant to the one in the matrix
+          conda init bash
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            source ~/.bash_profile
+          else
+            source ~/.bashrc
+          fi
+          conda activate $CONDA_ENV
+          # Update version in recipe/meta.yaml based on OS
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            sed -i '' "3s/0\.0\.1/${LATEST_TAG}/g" recipe/meta.yaml
+          else
+            sed -i "3s/0\.0\.1/${LATEST_TAG}/g" recipe/meta.yaml
+          fi
+          cd recipe
+          rattler-build build --recipe recipe.yaml
+          # Get the path to the built package from the output folder
+          BUILT_PKG=$(find output -type f \( -name "*.conda" -o -name "*.tar.bz2" \))
+          echo "Built package: ${BUILT_PKG}"
+          echo "BUILT_PKG=${BUILT_PKG}" >> $GITHUB_ENV
+          rattler-build upload anaconda -o lcrippa ${BUILT_PKG}
+
