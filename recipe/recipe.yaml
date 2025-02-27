@@ -6,9 +6,6 @@ package:
   name: ${{ name }}
   version: ${{ version }}
 
-source:
-  git: https://github.com/EDIpack/EDIpack2.0.git
-
 build:
   number: 0
 
