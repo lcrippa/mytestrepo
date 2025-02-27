@@ -1,4 +1,4 @@
-name: Test on mac os
+name: Test get tag
 
 on:
   workflow_dispatch: # This makes the workflow run only when manually triggered
