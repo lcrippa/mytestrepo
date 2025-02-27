@@ -27,7 +27,7 @@ jobs:
 
       - name: Create and activate build environment
         run: |
-          conda create -n build-env python=${{ matrix.python-version }} rattler-build anaconda-client -y
+          conda create -n build-env python=${{ matrix.python-version }} rattler-build -y
           echo "CONDA_ENV=build-env" >> $GITHUB_ENV
 
       - name: Get Latest Tag from edipack2.0
