@@ -20,43 +20,43 @@ requirements:
     - ninja
     - meson
     - meson-python
-    - '{{ compiler("c") }}'
-    - '{{ compiler("fortran") }}'
+    - ${{ compiler("c") }}
+    - ${{ compiler("fortran") }}
     - openmpi
     - mpi
-    if: linux
-    then:
-        - libgfortran-ng=13  # [linux]
+    - if: linux
+      then:
+        - libgfortran-ng  # [linux]
   host:
     - python
     - meson-python
     - pip
     - numpy
     - mpi4py
-    if: linux
-    then:
-      - mkl <2025  # [linux]
-    if: osx
-    then:
-      - mkl-devel <2025  # [linux]
-      - mkl-include <2025  # [linux]
-      - openblas  # [osx]
-      - lapack  # [osx]
-      - scalapack  # [osx]
+    - if: linux
+      then:
+        - mkl <2025  # [linux]
+    - if: osx
+      then:
+        - mkl-devel <2025  # [linux]
+        - mkl-include <2025  # [linux]
+        - openblas  # [osx]
+        - lapack  # [osx]
+        - scalapack  # [osx]
   run:
     - python
     - numpy
     - mpi4py
     - openmpi
     - pkg-config
-    if: linux
-    then:
-      - mkl <2025  # [linux]
-    if: osx
-    then:
-      - openblas  # [osx]
-      - lapack  # [osx]
-      - scalapack  # [osx]
+    - if: linux
+      then:
+        - mkl <2025  # [linux]
+    - if: osx
+      then:
+        - openblas  # [osx]
+        - lapack  # [osx]
+        - scalapack  # [osx]
 
 about:
   repository: https://github.com/EDIpack/EDIpack2.0
