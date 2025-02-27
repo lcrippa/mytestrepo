@@ -50,12 +50,11 @@ jobs:
           conda activate $CONDA_ENV
           # Update version in recipe/meta.yaml based on OS
           if [[ "$RUNNER_OS" == "macOS" ]]; then
-            sed -i '' "3s/0\.0\.1/${LATEST_TAG}/g" recipe/meta.yaml
+            sed -i '' "3s/0\.0\.1/${LATEST_TAG}/g" recipe/recipe.yaml
           else
-            sed -i "3s/0\.0\.1/${LATEST_TAG}/g" recipe/meta.yaml
+            sed -i "3s/0\.0\.1/${LATEST_TAG}/g" recipe/recipe.yaml
           fi
-          cd recipe
-          rattler-build build --recipe recipe.yaml
+          rattler-build build --recipe recipe/recipe.yaml
           # Get the path to the built package from the output folder
           BUILT_PKG=$(find output -type f \( -name "*.conda" -o -name "*.tar.bz2" \))
           echo "Built package: ${BUILT_PKG}"
